@@ -102,7 +102,7 @@ public static unsafe class ActionStackManager
             }
 
             if (ReAction.Config.EnableInstantGroundTarget && !succeeded && queuedGroundTargetObjectID == 0)
-                SetInstantGroundTarget(actionType, useType);
+                SetInstantGroundTarget(actionType, adjustedActionID, useType);
 
             return ret!.Value;
         }
@@ -149,11 +149,15 @@ public static unsafe class ActionStackManager
     private static bool CanUseAction(uint id, GameObject* target)
         => ActionManager.CanUseActionOnGameObject(id, target) && Common.ActionManager->CS.GetActionStatus(ActionType.Action, id, target->GetGameObjectId(), false, false) == 0;
 
-    private static void SetInstantGroundTarget(uint actionType, uint useType)
+    private static void SetInstantGroundTarget(uint actionType, uint actionID, uint useType)
     {
-        if ((ReAction.Config.EnableBlockMiscInstantGroundTargets && actionType == 11) || useType == 2 && actionType == 1 || actionType == 15) return;
+        // Only arm instant targeting on the initial ground-target use.
+        // Re-arming it during the confirmation pass can combine badly with turbo repeats (for example, double Shukuchi).
+        if (useType != 0 || actionType == 15) return;
+        if (ReAction.Config.EnableBlockMiscInstantGroundTargets && actionType == 11) return;
+        if (actionType == 1 && (!ReAction.actionSheet.TryGetValue(actionID, out var action) || !action.TargetArea)) return;
 
-        DalamudApi.LogDebug($"Making ground target instant {actionType}, {useType}");
+        DalamudApi.LogDebug($"Making ground target instant {actionType}, {actionID}, {useType}");
 
         Common.ActionManager->activateGroundTarget = 1;
     }

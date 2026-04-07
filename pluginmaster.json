@@ -1,0 +1,27 @@
+[
+  {
+    "Author": "UnknownX",
+    "Name": "ReAction",
+    "Punchline": "QoL for the battle system.",
+    "Description": "Improves aspects of the battle system with action stacks (like MOAction) and various QoL settings.",
+    "Changelog": "Validated for patch 7.45 hot fix 2, kept API 14 / .NET 10 packaging current, and fixed the double Shukuchi interaction with turbo + instant ground targeting.",
+    "InternalName": "ReAction",
+    "AssemblyVersion": "1.3.4.4",
+    "RepoUrl": "https://github.com/ShiftyKiwi/ReAction",
+    "ApplicableVersion": "any",
+    "CategoryTags": [
+      "jobs"
+    ],
+    "DalamudApiLevel": 14,
+    "IconUrl": "",
+    "ImageUrls": [
+      ""
+    ],
+    "IsHide": false,
+    "IsTestingExclusive": false,
+    "AcceptsFeedback": true,
+    "DownloadLinkInstall": "https://github.com/ShiftyKiwi/ReAction/releases/download/v1.3.4.4/latest.zip",
+    "DownloadLinkTesting": "https://github.com/ShiftyKiwi/ReAction/releases/download/v1.3.4.4/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/ShiftyKiwi/ReAction/releases/download/v1.3.4.4/latest.zip"
+  }
+]

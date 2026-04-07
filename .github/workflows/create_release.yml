@@ -1,4 +1,4 @@
-name: Create Release and Update Repository
+name: Create Release
 
 on:
   push:
@@ -10,11 +10,43 @@ permissions:
 
 jobs:
   release:
-    uses: UnknownX7/DalamudPluginRepo/.github/workflows/reusable_create_release.yml@master
-    with:
-      internal_name: ReAction
-      solution_name: ReAction
-      build_configuration: Release
-      personal_plugin_repo: UnknownX7/DalamudPluginRepo
-      personal_plugin_repo_branch: master
-    secrets: inherit
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore ReAction.sln --locked-mode
+
+      - name: Build
+        run: dotnet build ReAction.sln -c Release --no-restore
+
+      - name: Verify tag matches manifest version
+        shell: pwsh
+        run: |
+          $manifest = Get-Content .\bin\Release\ReAction.json | ConvertFrom-Json
+          $expectedTag = "v$($manifest.AssemblyVersion)"
+          if ($expectedTag -ne "${{ github.ref_name }}") {
+            throw "Tag ${{ github.ref_name }} does not match manifest version $expectedTag."
+          }
+
+      - name: Publish GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" `
+            ".\bin\Release\ReAction\latest.zip#latest.zip" `
+            ".\bin\Release\ReAction.json#ReAction.json" `
+            --repo "${{ github.repository }}" `
+            --generate-notes `
+            --title "${{ github.ref_name }}"

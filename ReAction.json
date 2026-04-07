@@ -7,11 +7,11 @@
   "ImageUrls": [
     ""
   ],
-  "RepoUrl": "https://github.com/UnknownX7/ReAction",
+  "RepoUrl": "https://github.com/ShiftyKiwi/ReAction",
   "CategoryTags": [
     "jobs"
   ],
   "InternalName": "ReAction",
   "AssemblyVersion": "9.9.9.9",
-  "Changelog": ""
+  "Changelog": "Validated for patch 7.45 hot fix 2, kept API 14 / .NET 10 packaging current, and fixed the double Shukuchi interaction with turbo + instant ground targeting."
 }
